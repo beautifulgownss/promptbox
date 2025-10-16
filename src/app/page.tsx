@@ -1,102 +1,154 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from 'react';
+import Header from '@/components/Header';
+import PromptList from '@/components/PromptList';
+import CreatePromptModal from '@/components/CreatePromptModal';
+import TemplateSelector from '@/components/TemplateSelector';
+import FormatConverter from '@/components/FormatConverter';
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [prefilledContent, setPrefilledContent] = useState('');
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const handleCreatePrompt = async (title: string, content: string, tags: string[]) => {
+    try {
+      const response = await fetch('http://localhost:8000/prompts/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title,
+          content,
+          tags
+        }),
+      });
+      
+      if (response.ok) {
+        console.log('Prompt created successfully!');
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error('Error creating prompt:', error);
+    }
+  };
+
+  const handleTemplateSelect = (content: string) => {
+    setPrefilledContent(content);
+    setIsModalOpen(true);
+  };
+
+  const handleFormatConvert = (content: string) => {
+    setPrefilledContent(content);
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setPrefilledContent('');
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30">
+      <Header />
+      
+      <main className="max-w-7xl mx-auto px-6 py-8">
+        {/* Hero Section */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm border border-blue-200 rounded-2xl px-6 py-3 mb-6 shadow-sm">
+            <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+            <span className="text-sm font-medium text-green-700">AI Prompt Manager</span>
+          </div>
+          
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-slate-900 to-blue-800 bg-clip-text text-transparent mb-4">
+            Prompt Library
+          </h1>
+          <p className="text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
+            Streamline your AI workflow with professional prompt management, testing, and optimization tools.
+          </p>
+        </div>
+
+        {/* Stats & Actions */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+          <div className="lg:col-span-3">
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h2 className="text-2xl font-semibold text-slate-900 mb-2">Your Prompts</h2>
+                  <p className="text-slate-600">Manage and optimize your AI prompts</p>
+                </div>
+                
+                <div className="flex flex-wrap gap-3">
+                  <TemplateSelector onTemplateSelect={handleTemplateSelect} />
+                  <FormatConverter 
+                    initialContent={prefilledContent}
+                    onFormatConvert={handleFormatConvert}
+                  />
+                  <button 
+                    onClick={() => setIsModalOpen(true)}
+                    className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 flex items-center gap-2 shadow-lg hover:shadow-xl font-semibold"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                    New Prompt
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Quick Stats */}
+          <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl shadow-lg p-6 text-white">
+            <h3 className="font-semibold mb-4">Workspace</h3>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-blue-100">Active Prompts</span>
+                <span className="font-semibold">12</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-blue-100">Templates</span>
+                <span className="font-semibold">8</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-blue-100">Tests Run</span>
+                <span className="font-semibold">47</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+          <div className="p-8">
+            <PromptList />
+          </div>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      <CreatePromptModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        onSave={handleCreatePrompt}
+        initialContent={prefilledContent}
+      />
+
+      {/* Footer */}
+      <footer className="mt-16 border-t border-slate-200 bg-white/50">
+        <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">P</span>
+              </div>
+              <span className="font-semibold text-slate-900">PromptBox</span>
+            </div>
+            <div className="text-sm text-slate-600">
+              Professional AI Prompt Management System
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
   );
