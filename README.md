@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 PromptBox - Professional AI Prompt Management
 
-## Getting Started
+<div align="center">
 
-First, run the development server:
+![PromptBox](https://img.shields.io/badge/PromptBox-AI%20Prompt%20Manager-blue)
+![Version](https://img.shields.io/badge/version-1.0.0-green)
+![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+A professional, production-grade platform for managing, testing, and optimizing AI prompts.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+[Features](#features) • [Installation](#installation) • [Usage](#usage)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+</div>
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ✨ Features
 
-## Learn More
+### 🎯 Core Functionality
+- **Prompt Library** - Organize and manage all your AI prompts in one place
+- **Template System** - Quick-start with professionally designed prompt templates
+- **Format Conversion** - Convert prompts between XML, JSON, and Markdown formats
+- **A/B Testing** - Test multiple prompt variations with different inputs
+- **Version Control** - Track changes and revert to previous prompt versions
 
-To learn more about Next.js, take a look at the following resources:
+### 🎨 Professional UI
+- **Modern Design** - Clean, professional interface with gradient backgrounds
+- **Responsive Layout** - Works perfectly on desktop and mobile devices
+- **Real-time Previews** - See prompt results instantly
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 🔧 Advanced Tools
+- **Variable Support** - Use `{variables}` for dynamic prompt parts
+- **Batch Testing** - Test prompts against multiple inputs simultaneously
+- **Export Options** - Export prompts in various formats for different AI platforms
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🛠️ Tech Stack
 
-## Deploy on Vercel
+**Frontend:**
+- Next.js 15 with React 18
+- TypeScript for type safety
+- Tailwind CSS for styling
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Backend:**
+- FastAPI (Python)
+- RESTful API design
+- CORS enabled for frontend integration
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📦 Installation
+
+### Prerequisites
+- Node.js 18+ and npm
+- Python 3.8+
+
+### Quick Start
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/beautifulgownss/promptbox.git
+   cd promptbox
